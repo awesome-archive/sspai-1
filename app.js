@@ -13,7 +13,11 @@ app.use(async (ctx, next) => {
 
 app.use(async (ctx) => {
     const html = await pullArticle();
-    ctx.body = html;
+    const title = html.map((item) => {
+        return item.title
+    })
+
+    ctx.body = `<div>${title.join('<br/>')}</div>`;
 })
 
 app.listen(3000, (err) => {

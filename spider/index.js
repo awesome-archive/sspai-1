@@ -20,13 +20,15 @@ const pullArticle = async () => {
                 const $ = cheerio.load(body);
                 const articleValue = getArticleValue($);
                 articleValue.map((item, index) => {
-                    const f = ArticleModel.findOne({title: item.title});
-                    const instance = new ArticleModel(Object.assign({id: index}, item));
-                    instance.save();
-
+                    const f = ArticleModel.findOne({title: item.title}, (err, data) => {
+                        if (!data) {
+                            const instance = new ArticleModel(Object.assign({id: index}, item));
+                            instance.save();
+                        }
+                    });
                 })
 
-                resolve(body);
+                resolve(articleValue);
             }
         })
     })
